@@ -2,20 +2,29 @@ import { LoginRounded } from "@mui/icons-material";
 import {
   Button,
   Card,
+  CircularProgress,
   FormGroup,
+  LinearProgress,
   Link,
   TextField,
   Typography,
   useTheme,
 } from "@mui/material";
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import { useNavigate } from "react-router";
 import { signInAuth } from "../utils/auth";
+import CustomizedSnackbars from "./CostomizedSnackBar";
 function Sign() {
   const theme = useTheme();
+  const [snackbarState, setSnackbarState] = useState({
+    open: false,
+    message: "",
+  });
+  const [loading, setLoading] = useState(false);
   const [userIdRef, passwordRef] = [useRef(), useRef()];
   const navigate = useNavigate();
   function handleLogin() {
+    setLoading(true);
     const data = {
       userId: userIdRef.current.value,
       password: passwordRef.current.value,
@@ -23,9 +32,15 @@ function Sign() {
     signInAuth(data)
       .then((response) => {
         console.log(response);
+        setLoading(false);
       })
       .catch((error) => {
         console.log(error);
+        setSnackbarState({
+          open: true,
+          message: error.response.data.message,
+        });
+        setLoading(false);
       });
   }
   return (
@@ -193,21 +208,23 @@ function Sign() {
           label="Password"
         />
         <Button
-          startIcon={<LoginRounded />}
+          startIcon={loading ? null : <LoginRounded />}
           sx={{ margin: 1 }}
           variant="contained"
           color="primary"
           onClick={handleLogin}
+          disabled={loading}
         >
-          Login
+          {loading ? <CircularProgress size={30} /> : "Login"}
         </Button>
       </FormGroup>
       <Typography variant="body1" sx={{ textAlign: "center" }}>
-        Don't have an account?{" "}
+        Don't have an account?
         <Link onClick={() => navigate("/signUp")} underline="hover">
           SignUp
         </Link>
       </Typography>
+      <CustomizedSnackbars data={{ snackbarState, setSnackbarState }} />
     </Card>
   );
 }

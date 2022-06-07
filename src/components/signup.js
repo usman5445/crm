@@ -3,6 +3,7 @@ import {
   Box,
   Button,
   Card,
+  CircularProgress,
   FormControl,
   FormGroup,
   InputLabel,
@@ -13,12 +14,19 @@ import {
   Typography,
   useTheme,
 } from "@mui/material";
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import { useNavigate } from "react-router";
 import { signUpAuth } from "../utils/auth";
+import CustomizedSnackbars from "./CostomizedSnackBar";
 function SignUp() {
   const navigate = useNavigate();
   const theme = useTheme();
+  const [loading, setLoading] = useState(false);
+
+  const [snackbarState, setSnackbarState] = useState({
+    open: false,
+    message: "",
+  });
   const [userIdRef, userNameRef, emailRef, passwordRef, userTypeRef] = [
     useRef(),
     useRef(),
@@ -28,6 +36,7 @@ function SignUp() {
   ];
 
   function handleSignup() {
+    setLoading(true);
     const data = {
       name: userNameRef.current.value,
       userId: userIdRef.current.value,
@@ -39,9 +48,15 @@ function SignUp() {
     signUpAuth(data)
       .then((response) => {
         console.log(response);
+        setLoading(false);
       })
       .catch((error) => {
         console.log(error);
+        setSnackbarState({
+          open: true,
+          message: error.response.data.message,
+        });
+        setLoading(false);
       });
   }
   return (
@@ -236,13 +251,14 @@ function SignUp() {
         </FormControl>
 
         <Button
-          startIcon={<LoginRounded />}
+          startIcon={loading ? null : <LoginRounded />}
           sx={{ margin: 1 }}
           variant="contained"
           color="primary"
           onClick={handleSignup}
+          disabled={loading}
         >
-          SignUp
+          {loading ? <CircularProgress size={30} /> : "SignUp"}
         </Button>
       </FormGroup>
       <Typography variant="body1" sx={{ textAlign: "center" }}>
@@ -251,6 +267,7 @@ function SignUp() {
           Login
         </Link>
       </Typography>
+      <CustomizedSnackbars data={{ snackbarState, setSnackbarState }} />
     </Card>
   );
 }
