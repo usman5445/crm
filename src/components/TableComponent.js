@@ -1,5 +1,6 @@
 import {
   Paper,
+  Skeleton,
   Table,
   TableBody,
   TableCell,
@@ -13,7 +14,7 @@ import React from "react";
 export const TableComponent = ({ cols, rows }) => {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
-
+  const arr = new Array(10).fill("he");
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
@@ -23,33 +24,48 @@ export const TableComponent = ({ cols, rows }) => {
     setPage(0);
   };
   return (
-    <Paper>
+    <Paper sx={{ width: "100%" }}>
       <TableContainer sx={{ maxHeight: 440 }}>
-        <Table>
+        <Table stickyHeader aria-label="sticky table">
           <TableHead>
             <TableRow>
               {cols.map((col) => (
-                <TableCell
-                  key={col.lable}
-                  style={{ top: 57, minWidth: column.minWidth }}
-                >
+                <TableCell key={col.lable} style={{ minWidth: col.minWidth }}>
                   {col.lable}
                 </TableCell>
               ))}
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows
-              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              .map((row) => {
-                return (
-                  <TableRow hover role="checkbox" tabindex="-1">
-                    {cols.map((col) => {
-                      return <TableCell>{rows[col.id]}</TableCell>;
-                    })}
-                  </TableRow>
-                );
-              })}
+            {rows.length == 0
+              ? arr.map((row) => {
+                  return (
+                    <TableRow hover role="checkbox" tabIndex="-1">
+                      {cols.map((col) => {
+                        return (
+                          <TableCell>
+                            <Skeleton
+                              variant="text"
+                              animation="wave"
+                              width={col.width}
+                            />
+                          </TableCell>
+                        );
+                      })}
+                    </TableRow>
+                  );
+                })
+              : rows
+                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  .map((row) => {
+                    return (
+                      <TableRow hover role="checkbox" tabIndex="-1">
+                        {cols.map((col) => {
+                          return <TableCell>{row[col.id]}</TableCell>;
+                        })}
+                      </TableRow>
+                    );
+                  })}
           </TableBody>
         </Table>
       </TableContainer>
