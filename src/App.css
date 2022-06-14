@@ -11,4 +11,5 @@ body {
   align-items: center;
   justify-content: center;
   border-radius: 0;
+  overflow-y: scroll;
 }

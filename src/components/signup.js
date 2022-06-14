@@ -15,7 +15,7 @@ import {
   useTheme,
 } from "@mui/material";
 import React, { useRef, useState } from "react";
-import { useNavigate } from "react-router";
+import { Navigate, useNavigate } from "react-router";
 import { signUpAuth } from "../utils/auth";
 import CustomizedSnackbars from "./CostomizedSnackBar";
 function SignUp() {
@@ -48,13 +48,16 @@ function SignUp() {
     signUpAuth(data)
       .then((response) => {
         console.log(response);
+        navigate("/signIn");
         setLoading(false);
       })
       .catch((error) => {
         console.log(error);
         setSnackbarState({
           open: true,
-          message: error.response.data.message,
+          message: error.response.data
+            ? error.response.data.message
+            : error.message,
         });
         setLoading(false);
       });

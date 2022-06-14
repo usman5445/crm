@@ -4,18 +4,20 @@ import {
   Card,
   CircularProgress,
   FormGroup,
-  LinearProgress,
   Link,
   TextField,
   Typography,
   useTheme,
 } from "@mui/material";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router";
 import { signInAuth } from "../utils/auth";
 import CustomizedSnackbars from "./CostomizedSnackBar";
+import { userSliceAction } from "../reduxSetup/userSlice";
+import { useDispatch } from "react-redux";
 function Sign() {
   const theme = useTheme();
+  const dispatch = useDispatch();
   const [snackbarState, setSnackbarState] = useState({
     open: false,
     message: "",
@@ -23,6 +25,7 @@ function Sign() {
   const [loading, setLoading] = useState(false);
   const [userIdRef, passwordRef] = [useRef(), useRef()];
   const navigate = useNavigate();
+
   function handleLogin() {
     setLoading(true);
     const data = {
@@ -32,17 +35,32 @@ function Sign() {
     signInAuth(data)
       .then((response) => {
         console.log(response);
+        dispatch(userSliceAction.saveUser(response.data));
+        localStorage.setItem("userData", JSON.stringify(response.data));
+        if (response.data.userTypes) {
+          response.data.userTypes == "CUSTOMER" && navigate("/customer");
+          response.data.userTypes == "ENGINEER" && navigate("/engineer");
+          response.data.userTypes == "ADMIN" && navigate("/admin");
+        } else {
+          setSnackbarState({
+            open: true,
+            message: response.data.message,
+          });
+        }
         setLoading(false);
       })
       .catch((error) => {
         console.log(error);
         setSnackbarState({
           open: true,
-          message: error.response.data.message,
+          message: error.response.data
+            ? error.response.data.message
+            : error.message,
         });
         setLoading(false);
       });
   }
+
   return (
     <Card
       sx={{
@@ -200,12 +218,15 @@ function Sign() {
           sx={{ margin: 1 }}
           variant="outlined"
           label="UserId"
+          required={true}
         />
         <TextField
           inputRef={passwordRef}
           sx={{ margin: 1 }}
           variant="outlined"
           label="Password"
+          type={"password"}
+          required={true}
         />
         <Button
           startIcon={loading ? null : <LoginRounded />}
