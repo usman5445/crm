@@ -10,13 +10,17 @@ import {
   Card,
   CircularProgress,
   Divider,
+  styled,
   Typography,
-  useTheme,
 } from "@mui/material";
 import React from "react";
 
 export const TicketStatusCard = ({ cardData }) => {
-  const theme = useTheme();
+  const StyledCircularProgress = styled(CircularProgress)(({ theme }) => ({
+    circle: {
+      backgroundColor: "#fff",
+    },
+  }));
   switch (cardData.variant) {
     case "Open":
       return (
@@ -61,7 +65,7 @@ export const TicketStatusCard = ({ cardData }) => {
             <CircularProgress
               color="primary"
               variant="determinate"
-              value={75}
+              value={(cardData.number / cardData.total) * 100}
             />
           </Box>
         </Card>
@@ -106,10 +110,10 @@ export const TicketStatusCard = ({ cardData }) => {
             <Typography variant="h2" color="text.secondary">
               {cardData.number}
             </Typography>
-            <CircularProgress
+            <StyledCircularProgress
               color="success"
               variant="determinate"
-              value={75}
+              value={(cardData.number / cardData.total) * 100}
             />
           </Box>
         </Card>
@@ -157,7 +161,7 @@ export const TicketStatusCard = ({ cardData }) => {
             <CircularProgress
               color="warning"
               variant="determinate"
-              value={75}
+              value={(cardData.number / cardData.total) * 100}
             />
           </Box>
         </Card>
@@ -202,10 +206,15 @@ export const TicketStatusCard = ({ cardData }) => {
             <Typography variant="h2" color="text.secondary">
               {cardData.number}
             </Typography>
-            <CircularProgress color="error" variant="determinate" value={75} />
+            <CircularProgress
+              color="error"
+              variant="determinate"
+              value={(cardData.number / cardData.total) * 100}
+            />
           </Box>
         </Card>
       );
+
     default:
       break;
   }

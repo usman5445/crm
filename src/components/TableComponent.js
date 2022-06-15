@@ -30,7 +30,7 @@ export const TableComponent = ({ cols, rows }) => {
           <TableHead>
             <TableRow>
               {cols.map((col) => (
-                <TableCell key={col.lable} style={{ minWidth: col.minWidth }}>
+                <TableCell key={col.id} style={{ minWidth: col.minWidth }}>
                   {col.lable}
                 </TableCell>
               ))}
@@ -38,12 +38,17 @@ export const TableComponent = ({ cols, rows }) => {
           </TableHead>
           <TableBody>
             {rows.length == 0
-              ? arr.map((row) => {
+              ? arr.map((row, index) => {
                   return (
-                    <TableRow hover role="checkbox" tabIndex="-1">
+                    <TableRow
+                      key={row.id + index.toString()}
+                      hover
+                      role="checkbox"
+                      tabIndex="-1"
+                    >
                       {cols.map((col) => {
                         return (
-                          <TableCell>
+                          <TableCell key={col.id + col.lable}>
                             <Skeleton
                               variant="text"
                               animation="wave"
@@ -57,11 +62,20 @@ export const TableComponent = ({ cols, rows }) => {
                 })
               : rows
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                  .map((row) => {
+                  .map((row, index) => {
                     return (
-                      <TableRow hover role="checkbox" tabIndex="-1">
+                      <TableRow
+                        key={row.id + index.toString()}
+                        hover
+                        role="checkbox"
+                        tabIndex="-1"
+                      >
                         {cols.map((col) => {
-                          return <TableCell>{row[col.id]}</TableCell>;
+                          return (
+                            <TableCell key={row.id + col.id}>
+                              {row[col.id]}
+                            </TableCell>
+                          );
                         })}
                       </TableRow>
                     );

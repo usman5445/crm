@@ -20,8 +20,9 @@ import Welcome from "./components/welcome";
 import store from "./reduxSetup/Store";
 import { AuthorizedRoute } from "./utils/authorizedRoute";
 function App() {
-  const [isDark, setIsDark] = useState(sessionStorage.getItem("isDark"));
-  console.log(sessionStorage.getItem("isDark"));
+  const [isDark, setIsDark] = useState(
+    Boolean(sessionStorage.getItem("isDark"))
+  );
   const darkTheme = createTheme({
     palette: {
       mode: !isDark ? "light" : "dark",

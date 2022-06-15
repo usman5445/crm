@@ -98,10 +98,38 @@ export const Admin = () => {
             marginBottom: 3,
           }}
         >
-          <TicketStatusCard cardData={{ variant: "Open", number: "6" }} />
-          <TicketStatusCard cardData={{ variant: "Progress", number: "6" }} />
-          <TicketStatusCard cardData={{ variant: "Closed", number: "6" }} />
-          <TicketStatusCard cardData={{ variant: "Blocked", number: "6" }} />
+          <TicketStatusCard
+            cardData={{
+              variant: "Open",
+              number: ticketsList.filter((item) => item.status == "OPEN")
+                .length,
+              total: ticketsList.length,
+            }}
+          />
+          <TicketStatusCard
+            cardData={{
+              variant: "Progress",
+              number: ticketsList.filter((item) => item.status == "IN_PROGRESS")
+                .length,
+              total: ticketsList.length,
+            }}
+          />
+          <TicketStatusCard
+            cardData={{
+              variant: "Closed",
+              number: ticketsList.filter((item) => item.status == "CLOSED")
+                .length,
+              total: ticketsList.length,
+            }}
+          />
+          <TicketStatusCard
+            cardData={{
+              variant: "Blocked",
+              number: ticketsList.filter((item) => item.status == "BLOCKED")
+                .length,
+              total: ticketsList.length,
+            }}
+          />
         </Box>
         <Divider sx={{ width: "100%" }} />
         <TabPanelComponent
