@@ -2,6 +2,8 @@ import { Box, Divider, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { fetchTickets } from "../utils/fetchTickets";
 import { fetchUsers } from "../utils/fetchUsers";
+import FormDialog from "./Dialog";
+import Dialog from "./Dialog";
 import Sidebaar from "./Sidebaar";
 import TabPanelComponent from "./TabsPanel";
 import { TicketStatusCard } from "./TicketStatusCard";

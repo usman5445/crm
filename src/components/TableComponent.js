@@ -10,13 +10,26 @@ import {
   TableRow,
 } from "@mui/material";
 import React from "react";
+import { useState } from "react";
+import FormDialog from "./Dialog";
 
 export const TableComponent = ({ cols, rows }) => {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [dailog, setDailog] = useState(false);
+  const [dailogData, setDailogData] = useState([]);
   const arr = new Array(10).fill("he");
+
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
+  };
+
+  const handleRowClick = (e) => {
+    let dataArr = e.target.parentElement.childNodes;
+    dataArr = Object.keys(dataArr).map((el) => dataArr[el].innerText);
+    console.log(dataArr);
+    setDailogData(dataArr);
+    setDailog(true);
   };
 
   const handleChangeRowsPerPage = (event) => {
@@ -25,12 +38,19 @@ export const TableComponent = ({ cols, rows }) => {
   };
   return (
     <Paper sx={{ width: "100%" }}>
+      <FormDialog open={dailog} setOpen={setDailog} data={dailogData} />
+
       <TableContainer sx={{ maxHeight: 440 }}>
         <Table stickyHeader aria-label="sticky table">
           <TableHead>
             <TableRow>
               {cols.map((col) => (
-                <TableCell key={col.id} style={{ minWidth: col.minWidth }}>
+                <TableCell
+                  key={col.id}
+                  style={{
+                    minWidth: col.minWidth,
+                  }}
+                >
                   {col.lable}
                 </TableCell>
               ))}
@@ -45,6 +65,7 @@ export const TableComponent = ({ cols, rows }) => {
                       hover
                       role="checkbox"
                       tabIndex="-1"
+                      selected
                     >
                       {cols.map((col) => {
                         return (
@@ -72,7 +93,10 @@ export const TableComponent = ({ cols, rows }) => {
                       >
                         {cols.map((col) => {
                           return (
-                            <TableCell key={row.id + col.id}>
+                            <TableCell
+                              key={row.id + col.id}
+                              onClick={(e) => handleRowClick(e)}
+                            >
                               {row[col.id]}
                             </TableCell>
                           );
