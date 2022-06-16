@@ -10,6 +10,9 @@ export async function updateUsers(dataObj) {
         "x-access-token": JSON.parse(localStorage.getItem("userData"))
           .accessToken,
       },
+    },
+    {
+      userId: JSON.parse(localStorage.getItem("userData")).userId,
     }
   );
 }

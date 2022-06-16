@@ -27,14 +27,17 @@ export default function FormDialog({ open, setOpen, data }) {
   ];
   const handleSubmit = () => {
     const updatedDataObj = {
-      name: userNameRef.current.value,
       userId: userIdRef.current.value,
-      email: emailRef.current.value,
+      userName: userNameRef.current.value,
+      userStatus: userStatusRef.current.value,
       userType: userTypeRef.current.value,
     };
     (async function () {
       await updateUsers(updatedDataObj)
-        .then((resp) => console.log(resp))
+        .then((resp) => {
+          console.log(resp);
+          setOpen(false);
+        })
         .catch((err) => console.log(err));
     })();
   };
@@ -74,6 +77,7 @@ export default function FormDialog({ open, setOpen, data }) {
               inputRef={emailRef}
               variant="outlined"
               label="Email"
+              disabled
               defaultValue={data[1]}
             />
             <FormControl fullWidth sx={{ margin: 1 }}>
