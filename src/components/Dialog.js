@@ -15,6 +15,7 @@ import {
   MenuItem,
 } from "@mui/material";
 import { updateUsers } from "../utils/updateUser";
+import { updateTicket } from "../utils/updateTicket";
 
 export default function FormDialog({ open, setOpen, data }) {
   //   const [open, setOpen] = React.useState(false);
@@ -25,21 +26,49 @@ export default function FormDialog({ open, setOpen, data }) {
     useRef(),
     useRef(),
   ];
+  const [
+    ticketIdRef,
+    ticketTitleRef,
+    ticketDiscriptionRef,
+    ticketPriorityRef,
+    ticketStatusRef,
+    ticketAssigneeRef,
+    ticketReporterRef,
+  ] = [useRef(), useRef(), useRef(), useRef(), useRef(), useRef(), useRef()];
   const handleSubmit = () => {
-    const updatedDataObj = {
-      userId: userIdRef.current.value,
-      userName: userNameRef.current.value,
-      userStatus: userStatusRef.current.value,
-      userType: userTypeRef.current.value,
-    };
-    (async function () {
-      await updateUsers(updatedDataObj)
-        .then((resp) => {
-          console.log(resp);
-          setOpen(false);
-        })
-        .catch((err) => console.log(err));
-    })();
+    if (data.length == 7) {
+      const updatedDataObj = {
+        title: ticketTitleRef.current.value,
+        description: ticketDiscriptionRef.current.value,
+        ticketPriority: ticketPriorityRef.current.value,
+        status: ticketStatusRef.current.value,
+        assignee: ticketAssigneeRef.current.value,
+        ticketId: ticketIdRef.current.value,
+      };
+      (async function () {
+        await updateTicket(updatedDataObj)
+          .then((resp) => {
+            console.log(resp);
+            setOpen(false);
+          })
+          .catch((err) => console.log(err));
+      })();
+    } else {
+      const updatedDataObj = {
+        userId: userIdRef.current.value,
+        userName: userNameRef.current.value,
+        userStatus: userStatusRef.current.value,
+        userType: userTypeRef.current.value,
+      };
+      (async function () {
+        await updateUsers(updatedDataObj)
+          .then((resp) => {
+            console.log(resp);
+            setOpen(false);
+          })
+          .catch((err) => console.log(err));
+      })();
+    }
   };
 
   const handleClose = () => {
@@ -81,7 +110,7 @@ export default function FormDialog({ open, setOpen, data }) {
               defaultValue={data[1]}
             />
             <FormControl fullWidth sx={{ margin: 1 }}>
-              <InputLabel id="demo-simple-select-label">UserType</InputLabel>
+              <InputLabel id="demo-simple-select-label">User Type</InputLabel>
               <Select
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
@@ -95,7 +124,7 @@ export default function FormDialog({ open, setOpen, data }) {
               </Select>
             </FormControl>
             <FormControl fullWidth sx={{ margin: 1 }}>
-              <InputLabel id="demo-simple-select-label">UserType</InputLabel>
+              <InputLabel id="demo-simple-select-label">User Status</InputLabel>
               <Select
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
@@ -108,7 +137,72 @@ export default function FormDialog({ open, setOpen, data }) {
               </Select>
             </FormControl>
           </FormGroup>
-        ) : null}
+        ) : (
+          <FormGroup sx={{ padding: 2 }}>
+            <TextField
+              sx={{ margin: 1 }}
+              inputRef={ticketIdRef}
+              variant="outlined"
+              label="Ticket Id"
+              disabled
+              defaultValue={data[0]}
+            />
+            <TextField
+              sx={{ margin: 1 }}
+              inputRef={ticketTitleRef}
+              variant="outlined"
+              label="Title"
+              defaultValue={data[1]}
+            />
+            <TextField
+              sx={{ margin: 1 }}
+              inputRef={ticketDiscriptionRef}
+              variant="outlined"
+              label="Description"
+              defaultValue={data[2]}
+            />
+            <TextField
+              sx={{ margin: 1 }}
+              inputRef={ticketPriorityRef}
+              variant="outlined"
+              type={"number"}
+              label="Ticket Priority"
+              defaultValue={data[3]}
+            />
+            <FormControl fullWidth sx={{ margin: 1 }}>
+              <InputLabel id="demo-simple-select-label">
+                Ticket Status
+              </InputLabel>
+              <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                label="Ticket Status"
+                inputRef={ticketStatusRef}
+                defaultValue={data[4]}
+              >
+                <MenuItem value={"CLOSED"}>CLOSED</MenuItem>
+                <MenuItem value={"OPEN"}>OPEN</MenuItem>
+                <MenuItem value={"BLOCKED"}>BLOCKED</MenuItem>
+                <MenuItem value={"IN_PROGRESS"}>PROGRESS</MenuItem>
+              </Select>
+            </FormControl>
+            <TextField
+              sx={{ margin: 1 }}
+              inputRef={ticketAssigneeRef}
+              variant="outlined"
+              label="Ticket Assignee"
+              defaultValue={data[5]}
+            />
+            <TextField
+              sx={{ margin: 1 }}
+              inputRef={ticketReporterRef}
+              variant="outlined"
+              label="Ticket Reporter"
+              disabled
+              defaultValue={data[6]}
+            />
+          </FormGroup>
+        )}
       </DialogContent>
       <DialogActions>
         <Button onClick={handleClose}>Cancel</Button>

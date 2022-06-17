@@ -8,6 +8,7 @@ import {
   TableHead,
   TablePagination,
   TableRow,
+  Typography,
 } from "@mui/material";
 import React from "react";
 import { useState } from "react";
@@ -107,6 +108,9 @@ export const TableComponent = ({ cols, rows }) => {
           </TableBody>
         </Table>
       </TableContainer>
+      <Typography variant="subtitle2">
+        Select Any Row To Update The Item
+      </Typography>
       <TablePagination
         rowsPerPageOptions={[10, 25, 100]}
         component="div"
