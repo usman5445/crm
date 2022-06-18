@@ -1,5 +1,10 @@
 import { Box, Divider, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import {
+  fetchTicketsThunk,
+  ticketsDataActions,
+} from "../reduxSetup/ticketDataSlice";
 import { fetchTickets } from "../utils/fetchTickets";
 import { fetchUsers } from "../utils/fetchUsers";
 import FormDialog from "./Dialog";
@@ -9,6 +14,7 @@ import TabPanelComponent from "./TabsPanel";
 import { TicketStatusCard } from "./TicketStatusCard";
 
 export const Admin = () => {
+  const dispatch = useDispatch();
   const user = JSON.parse(localStorage.getItem("userData"));
   const [usersList, setUsersList] = useState([]);
   const [usersListCols, setUsersListCols] = useState([]);
@@ -41,24 +47,7 @@ export const Admin = () => {
         })
         .catch((error) => console.log(error));
 
-      await fetchTickets()
-        .then((response) => {
-          console.log(response);
-          setTicketsListCols([
-            { id: "id", lable: "Id" },
-            { id: "title", lable: "Title" },
-            {
-              id: "description",
-              lable: "Description",
-            },
-            { id: "ticketPriority", lable: "Priority" },
-            { id: "status", lable: "Status" },
-            { id: "assignee", lable: "Assignee" },
-            { id: "reporter", lable: "Reporter" },
-          ]);
-          setTicketsList(response.data);
-        })
-        .catch((error) => console.log(error));
+      dispatch(fetchTicketsThunk());
     })();
   }, []);
 
@@ -134,10 +123,7 @@ export const Admin = () => {
           />
         </Box>
         <Divider sx={{ width: "100%" }} />
-        <TabPanelComponent
-          ticketList={{ rows: ticketsList }}
-          userList={{ rows: usersList }}
-        />
+        <TabPanelComponent userList={{ rows: usersList }} />
       </Box>
     </Box>
   );

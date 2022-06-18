@@ -40,7 +40,7 @@ function a11yProps(index) {
   };
 }
 
-export default function TabPanelComponent({ ticketList, userList }) {
+export default function TabPanelComponent({ userList }) {
   const [value, setValue] = React.useState(0);
 
   const handleChange = (event, newValue) => {
@@ -62,11 +62,11 @@ export default function TabPanelComponent({ ticketList, userList }) {
       </Box>
       <TabPanel value={value} index={0}>
         {/* <TableComponent cols={ticketList.cols} rows={ticketList.rows} /> */}
-        <DataTableComponent tableCase={"TicketTable"} rows={ticketList.rows} />
+        <DataTableComponent tableCase={"TicketTable"} />
       </TabPanel>
       <TabPanel value={value} index={1}>
         {/* <TableComponent cols={userList.cols} rows={userList.rows} /> */}{" "}
-        <DataTableComponent tableCase={"UserTable"} rows={userList.rows} />
+        {/* <DataTableComponent tableCase={"UserTable"} rows={userList.rows} /> */}
       </TabPanel>
     </Box>
   );

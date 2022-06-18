@@ -1,14 +1,25 @@
 import { Box } from "@mui/material";
 import { DataGrid, GridToolbarExport } from "@mui/x-data-grid";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import CustomizedSnackbars from "./CostomizedSnackBar";
 import FormDialog from "./Dialog";
 
 export default function DataTableComponent(props) {
+  const [snackbarState, setSnackbarState] = useState({
+    open: false,
+    message: "",
+  });
   const [pageSize, setPageSize] = useState(10);
   let cols = [];
-
+  const ticketData = useSelector((state) => state.ticketsData);
   const [dailog, setDailog] = useState(false);
   const [dailogData, setDailogData] = useState({});
+
+  useEffect(() => {
+    ticketData.error &&
+      setSnackbarState({ open: true, message: ticketData.error });
+  }, [ticketData]);
   //   Changing colums depending on whether its user table or ticket table.
   switch (props.tableCase) {
     case "UserTable":
@@ -45,13 +56,13 @@ export default function DataTableComponent(props) {
       <FormDialog open={dailog} setOpen={setDailog} data={dailogData} />
 
       <DataGrid
-        rows={props.rows}
+        rows={ticketData.data}
         getRowId={(row) =>
           props.tableCase == "UserTable" ? row.userId : row.id
         }
         columns={cols}
         pageSize={pageSize}
-        loading={props.rows.length == 0 && true}
+        loading={ticketData.loading}
         onPageSizeChange={(pageSize) => setPageSize(pageSize)}
         rowsPerPageOptions={[10, 25, 50]}
         onRowClick={(params) => handleRowClick(params.row)}
@@ -60,6 +71,7 @@ export default function DataTableComponent(props) {
           toolbar: { printOptions: { disableToolbarButton: true } },
         }}
       />
+      <CustomizedSnackbars data={{ snackbarState, setSnackbarState }} />
     </Box>
   );
 }

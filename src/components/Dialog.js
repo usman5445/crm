@@ -15,10 +15,15 @@ import {
   MenuItem,
 } from "@mui/material";
 import { updateUsers } from "../utils/updateUser";
-import { updateTicket } from "../utils/updateTicket";
+import { useDispatch } from "react-redux";
+import {
+  ticketsDataActions,
+  updateTicketThunk,
+} from "../reduxSetup/ticketDataSlice";
 
 export default function FormDialog({ open, setOpen, data }) {
   //   const [open, setOpen] = React.useState(false);
+  const dispatch = useDispatch();
   const [userIdRef, userNameRef, emailRef, userStatusRef, userTypeRef] = [
     useRef(),
     useRef(),
@@ -45,14 +50,8 @@ export default function FormDialog({ open, setOpen, data }) {
         assignee: ticketAssigneeRef.current.value,
         ticketId: ticketIdRef.current.value,
       };
-      (async function () {
-        await updateTicket(updatedDataObj)
-          .then((resp) => {
-            console.log(resp);
-            setOpen(false);
-          })
-          .catch((err) => console.log(err));
-      })();
+      dispatch(updateTicketThunk(updatedDataObj));
+      setOpen(false);
     } else {
       const updatedDataObj = {
         userId: userIdRef.current.value,
