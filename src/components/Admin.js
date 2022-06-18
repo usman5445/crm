@@ -135,8 +135,8 @@ export const Admin = () => {
         </Box>
         <Divider sx={{ width: "100%" }} />
         <TabPanelComponent
-          ticketList={{ cols: ticketsListCols, rows: ticketsList }}
-          userList={{ cols: usersListCols, rows: usersList }}
+          ticketList={{ rows: ticketsList }}
+          userList={{ rows: usersList }}
         />
       </Box>
     </Box>

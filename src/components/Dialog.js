@@ -36,7 +36,7 @@ export default function FormDialog({ open, setOpen, data }) {
     ticketReporterRef,
   ] = [useRef(), useRef(), useRef(), useRef(), useRef(), useRef(), useRef()];
   const handleSubmit = () => {
-    if (data.length == 7) {
+    if (Object.keys(data).length == 9) {
       const updatedDataObj = {
         title: ticketTitleRef.current.value,
         description: ticketDiscriptionRef.current.value,
@@ -78,20 +78,20 @@ export default function FormDialog({ open, setOpen, data }) {
   return (
     <Dialog open={open} onClose={handleClose}>
       <DialogTitle>
-        {data.length == 7 ? "Edit Ticket Data" : "Edit User Data"}
+        {Object.keys(data).length == 9 ? "Edit Ticket Data" : "Edit User Data"}
       </DialogTitle>
       <DialogContent>
         <DialogContentText>
           Change the values below and click on Submit button.
         </DialogContentText>
-        {data.length != 7 ? (
+        {Object.keys(data).length != 9 ? (
           <FormGroup sx={{ padding: 2 }}>
             <TextField
               sx={{ margin: 1 }}
               inputRef={userIdRef}
               variant="outlined"
               label="UserId"
-              defaultValue={data[2]}
+              defaultValue={data.userId}
               disabled
             />
             <TextField
@@ -99,7 +99,7 @@ export default function FormDialog({ open, setOpen, data }) {
               inputRef={userNameRef}
               variant="outlined"
               label="UserName"
-              defaultValue={data[0]}
+              defaultValue={data.name}
             />
             <TextField
               sx={{ margin: 1 }}
@@ -107,7 +107,7 @@ export default function FormDialog({ open, setOpen, data }) {
               variant="outlined"
               label="Email"
               disabled
-              defaultValue={data[1]}
+              defaultValue={data.email}
             />
             <FormControl fullWidth sx={{ margin: 1 }}>
               <InputLabel id="demo-simple-select-label">User Type</InputLabel>
@@ -116,7 +116,7 @@ export default function FormDialog({ open, setOpen, data }) {
                 id="demo-simple-select"
                 label="User Type"
                 inputRef={userTypeRef}
-                defaultValue={data[4]}
+                defaultValue={data.userTypes}
               >
                 <MenuItem value={"CUSTOMER"}>CUSTOMER</MenuItem>
                 <MenuItem value={"ENGINEER"}>ENGINEER</MenuItem>
@@ -130,7 +130,7 @@ export default function FormDialog({ open, setOpen, data }) {
                 id="demo-simple-select"
                 label="User Type"
                 inputRef={userStatusRef}
-                defaultValue={data[3]}
+                defaultValue={data.userStatus}
               >
                 <MenuItem value={"PENDING"}>PENDING</MenuItem>
                 <MenuItem value={"APPROVED"}>APPROVED</MenuItem>
@@ -145,21 +145,21 @@ export default function FormDialog({ open, setOpen, data }) {
               variant="outlined"
               label="Ticket Id"
               disabled
-              defaultValue={data[0]}
+              defaultValue={data.id}
             />
             <TextField
               sx={{ margin: 1 }}
               inputRef={ticketTitleRef}
               variant="outlined"
               label="Title"
-              defaultValue={data[1]}
+              defaultValue={data.title}
             />
             <TextField
               sx={{ margin: 1 }}
               inputRef={ticketDiscriptionRef}
               variant="outlined"
               label="Description"
-              defaultValue={data[2]}
+              defaultValue={data.description}
             />
             <TextField
               sx={{ margin: 1 }}
@@ -167,7 +167,7 @@ export default function FormDialog({ open, setOpen, data }) {
               variant="outlined"
               type={"number"}
               label="Ticket Priority"
-              defaultValue={data[3]}
+              defaultValue={data.ticketPriority}
             />
             <FormControl fullWidth sx={{ margin: 1 }}>
               <InputLabel id="demo-simple-select-label">
@@ -178,7 +178,7 @@ export default function FormDialog({ open, setOpen, data }) {
                 id="demo-simple-select"
                 label="Ticket Status"
                 inputRef={ticketStatusRef}
-                defaultValue={data[4]}
+                defaultValue={data.status}
               >
                 <MenuItem value={"CLOSED"}>CLOSED</MenuItem>
                 <MenuItem value={"OPEN"}>OPEN</MenuItem>
@@ -191,7 +191,7 @@ export default function FormDialog({ open, setOpen, data }) {
               inputRef={ticketAssigneeRef}
               variant="outlined"
               label="Ticket Assignee"
-              defaultValue={data[5]}
+              defaultValue={data.assignee}
             />
             <TextField
               sx={{ margin: 1 }}
@@ -199,7 +199,7 @@ export default function FormDialog({ open, setOpen, data }) {
               variant="outlined"
               label="Ticket Reporter"
               disabled
-              defaultValue={data[6]}
+              defaultValue={data.reporter}
             />
           </FormGroup>
         )}

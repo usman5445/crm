@@ -5,6 +5,7 @@ import Tab from "@mui/material/Tab";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import { TableComponent } from "./TableComponent";
+import DataTableComponent from "./DataTableComponent";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -60,10 +61,12 @@ export default function TabPanelComponent({ ticketList, userList }) {
         </Tabs>
       </Box>
       <TabPanel value={value} index={0}>
-        <TableComponent cols={ticketList.cols} rows={ticketList.rows} />
+        {/* <TableComponent cols={ticketList.cols} rows={ticketList.rows} /> */}
+        <DataTableComponent tableCase={"TicketTable"} rows={ticketList.rows} />
       </TabPanel>
       <TabPanel value={value} index={1}>
-        <TableComponent cols={userList.cols} rows={userList.rows} />
+        {/* <TableComponent cols={userList.cols} rows={userList.rows} /> */}{" "}
+        <DataTableComponent tableCase={"UserTable"} rows={userList.rows} />
       </TabPanel>
     </Box>
   );
