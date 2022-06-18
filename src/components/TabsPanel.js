@@ -2,9 +2,7 @@ import * as React from "react";
 import PropTypes from "prop-types";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
-import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
-import { TableComponent } from "./TableComponent";
 import DataTableComponent from "./DataTableComponent";
 
 function TabPanel(props) {
@@ -40,7 +38,7 @@ function a11yProps(index) {
   };
 }
 
-export default function TabPanelComponent({ userList }) {
+export default function TabPanelComponent() {
   const [value, setValue] = React.useState(0);
 
   const handleChange = (event, newValue) => {
@@ -66,7 +64,7 @@ export default function TabPanelComponent({ userList }) {
       </TabPanel>
       <TabPanel value={value} index={1}>
         {/* <TableComponent cols={userList.cols} rows={userList.rows} /> */}{" "}
-        {/* <DataTableComponent tableCase={"UserTable"} rows={userList.rows} /> */}
+        <DataTableComponent tableCase={"UserTable"} />
       </TabPanel>
     </Box>
   );

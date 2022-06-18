@@ -14,12 +14,9 @@ import {
   Select,
   MenuItem,
 } from "@mui/material";
-import { updateUsers } from "../utils/updateUser";
 import { useDispatch } from "react-redux";
-import {
-  ticketsDataActions,
-  updateTicketThunk,
-} from "../reduxSetup/ticketDataSlice";
+import { updateTicketThunk } from "../reduxSetup/ticketDataSlice";
+import { updateUsersThunk } from "../reduxSetup/userDataSlice";
 
 export default function FormDialog({ open, setOpen, data }) {
   //   const [open, setOpen] = React.useState(false);
@@ -53,20 +50,14 @@ export default function FormDialog({ open, setOpen, data }) {
       dispatch(updateTicketThunk(updatedDataObj));
       setOpen(false);
     } else {
-      const updatedDataObj = {
+      const updatedUserDataObj = {
         userId: userIdRef.current.value,
         userName: userNameRef.current.value,
         userStatus: userStatusRef.current.value,
         userType: userTypeRef.current.value,
       };
-      (async function () {
-        await updateUsers(updatedDataObj)
-          .then((resp) => {
-            console.log(resp);
-            setOpen(false);
-          })
-          .catch((err) => console.log(err));
-      })();
+      dispatch(updateUsersThunk(updatedUserDataObj));
+      setOpen(false);
     }
   };
 

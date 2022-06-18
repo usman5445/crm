@@ -1,14 +1,8 @@
 import { Box, Divider, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
-import {
-  fetchTicketsThunk,
-  ticketsDataActions,
-} from "../reduxSetup/ticketDataSlice";
-import { fetchTickets } from "../utils/fetchTickets";
-import { fetchUsers } from "../utils/fetchUsers";
-import FormDialog from "./Dialog";
-import Dialog from "./Dialog";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchTicketsThunk } from "../reduxSetup/ticketDataSlice";
+import { fetchUsersThunk } from "../reduxSetup/userDataSlice";
 import Sidebaar from "./Sidebaar";
 import TabPanelComponent from "./TabsPanel";
 import { TicketStatusCard } from "./TicketStatusCard";
@@ -16,39 +10,11 @@ import { TicketStatusCard } from "./TicketStatusCard";
 export const Admin = () => {
   const dispatch = useDispatch();
   const user = JSON.parse(localStorage.getItem("userData"));
-  const [usersList, setUsersList] = useState([]);
-  const [usersListCols, setUsersListCols] = useState([]);
-  const [ticketsList, setTicketsList] = useState([]);
-  const [ticketsListCols, setTicketsListCols] = useState([
-    { id: "id", lable: "Id" },
-    { id: "title", lable: "Title" },
-    {
-      id: "description",
-      lable: "Description",
-    },
-    { id: "ticketPriority", lable: "Priority" },
-    { id: "status", lable: "Status" },
-    { id: "assignee", lable: "Assignee" },
-    { id: "reporter", lable: "Reporter" },
-  ]);
-  useEffect(() => {
-    (async () => {
-      await fetchUsers()
-        .then((response) => {
-          console.log(response);
-          setUsersListCols([
-            { id: "name", lable: "Name" },
-            { id: "email", lable: "Email" },
-            { id: "userId", lable: "UserId" },
-            { id: "userStatus", lable: "UserStatus" },
-            { id: "userTypes", lable: "UserType" },
-          ]);
-          setUsersList(response.data);
-        })
-        .catch((error) => console.log(error));
+  const ticketData = useSelector((state) => state.ticketsData);
 
-      dispatch(fetchTicketsThunk());
-    })();
+  useEffect(() => {
+    dispatch(fetchTicketsThunk());
+    dispatch(fetchUsersThunk());
   }, []);
 
   return (
@@ -92,38 +58,39 @@ export const Admin = () => {
           <TicketStatusCard
             cardData={{
               variant: "Open",
-              number: ticketsList.filter((item) => item.status == "OPEN")
+              number: ticketData.data.filter((item) => item.status == "OPEN")
                 .length,
-              total: ticketsList.length,
+              total: ticketData.data.length,
             }}
           />
           <TicketStatusCard
             cardData={{
               variant: "Progress",
-              number: ticketsList.filter((item) => item.status == "IN_PROGRESS")
-                .length,
-              total: ticketsList.length,
+              number: ticketData.data.filter(
+                (item) => item.status == "IN_PROGRESS"
+              ).length,
+              total: ticketData.data.length,
             }}
           />
           <TicketStatusCard
             cardData={{
               variant: "Closed",
-              number: ticketsList.filter((item) => item.status == "CLOSED")
+              number: ticketData.data.filter((item) => item.status == "CLOSED")
                 .length,
-              total: ticketsList.length,
+              total: ticketData.data.length,
             }}
           />
           <TicketStatusCard
             cardData={{
               variant: "Blocked",
-              number: ticketsList.filter((item) => item.status == "BLOCKED")
+              number: ticketData.data.filter((item) => item.status == "BLOCKED")
                 .length,
-              total: ticketsList.length,
+              total: ticketData.data.length,
             }}
           />
         </Box>
         <Divider sx={{ width: "100%" }} />
-        <TabPanelComponent userList={{ rows: usersList }} />
+        <TabPanelComponent />
       </Box>
     </Box>
   );

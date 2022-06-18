@@ -2,8 +2,6 @@ import { fetchTickets } from "../utils/fetchTickets";
 import { updateTicket } from "../utils/updateTicket";
 
 const { createSlice, createAsyncThunk } = require("@reduxjs/toolkit");
-const { default: axios } = require("axios");
-const BASE_URL = process.env.REACT_APP_SERVER_URL;
 
 const initialState = {
   loading: false,
@@ -51,6 +49,7 @@ const ticketsDataSlice = createSlice({
       let foundIndex = state.data.findIndex(
         (row) => action.payload.id == row.id
       );
+      console.log(foundIndex, action.payload);
       state.data[foundIndex] = { ...state.data[foundIndex], ...action.payload };
       state.error = "";
     });
