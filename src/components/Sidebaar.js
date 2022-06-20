@@ -15,6 +15,7 @@ import {
   MenuRounded,
   TimelineRounded,
 } from "@mui/icons-material";
+import { Navigate, useNavigate } from "react-router";
 
 const drawerWidth = 240;
 
@@ -68,7 +69,7 @@ const Drawer = styled(MuiDrawer, {
 export default function Sidebaar() {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
-
+  const navigate = useNavigate();
   const handleDrawerOpen = () => {
     setOpen(true);
   };
@@ -77,6 +78,10 @@ export default function Sidebaar() {
     setOpen(false);
   };
 
+  function handleLogOut() {
+    localStorage.removeItem("userData");
+    navigate("/signIn");
+  }
   return (
     <Drawer
       variant="permanent"
@@ -144,6 +149,7 @@ export default function Sidebaar() {
       <List sx={{ justifySelf: "flex-end" }}>
         <ListItem disablePadding sx={{ display: "block" }}>
           <ListItemButton
+            onClick={handleLogOut}
             sx={{
               minHeight: 48,
               justifyContent: open ? "initial" : "center",
