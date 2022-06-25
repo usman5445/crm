@@ -14,13 +14,14 @@ import {
   Select,
   MenuItem,
 } from "@mui/material";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { updateTicketThunk } from "../reduxSetup/ticketDataSlice";
 import { updateUsersThunk } from "../reduxSetup/userDataSlice";
 
 export default function FormDialog({ open, setOpen, data }) {
   //   const [open, setOpen] = React.useState(false);
   const dispatch = useDispatch();
+  const usersData = useSelector((state) => state.usersData);
   const [userIdRef, userNameRef, emailRef, userStatusRef, userTypeRef] = [
     useRef(),
     useRef(),
@@ -176,13 +177,28 @@ export default function FormDialog({ open, setOpen, data }) {
                 <MenuItem value={"IN_PROGRESS"}>PROGRESS</MenuItem>
               </Select>
             </FormControl>
-            <TextField
-              sx={{ margin: 1 }}
-              inputRef={ticketAssigneeRef}
-              variant="outlined"
-              label="Ticket Assignee"
-              defaultValue={data.assignee}
-            />
+            <FormControl fullWidth sx={{ margin: 1 }}>
+              <InputLabel id="demo-simple-select-label">
+                Ticket Assignee
+              </InputLabel>
+              <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                label="Ticket Assignee"
+                inputRef={ticketAssigneeRef}
+                defaultValue={data.assignee}
+              >
+                {usersData.data
+                  .filter((user) => user.userTypes === "ENGINEER")
+                  .map((eng, index) => {
+                    return (
+                      <MenuItem key={index} value={eng.name}>
+                        {eng.name}
+                      </MenuItem>
+                    );
+                  })}
+              </Select>
+            </FormControl>
             <TextField
               sx={{ margin: 1 }}
               inputRef={ticketReporterRef}
