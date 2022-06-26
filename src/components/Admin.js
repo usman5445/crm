@@ -35,6 +35,7 @@ export const Admin = () => {
           alignItems: "center",
           display: "flex",
           flexDirection: "column",
+          overflowY: "scroll",
         }}
       >
         <Typography variant="h3" color="primary">

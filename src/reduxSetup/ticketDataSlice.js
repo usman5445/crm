@@ -34,6 +34,7 @@ const ticketsDataSlice = createSlice({
       state.loading = false;
       state.data = action.payload;
       state.error = "";
+      // console.log(action.payload);
     });
     builder.addCase(fetchTicketsThunk.rejected, (state, action) => {
       state.loading = false;
@@ -49,7 +50,7 @@ const ticketsDataSlice = createSlice({
       let foundIndex = state.data.findIndex(
         (row) => action.payload.id == row.id
       );
-      console.log(foundIndex, action.payload);
+      // console.log(foundIndex, action.payload);
       state.data[foundIndex] = { ...state.data[foundIndex], ...action.payload };
       state.error = "";
     });
