@@ -2,7 +2,7 @@ import { Box } from "@mui/material";
 import { DataGrid, GridToolbarExport } from "@mui/x-data-grid";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import CustomizedSnackbars from "./CostomizedSnackBar";
+import CustomizedSnackbars from "../common-components/CostomizedSnackBar";
 import FormDialog from "./Dialog";
 
 export default function DataTableComponent(props) {

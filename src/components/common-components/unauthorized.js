@@ -1,7 +1,7 @@
 import { Box, Button, Card, Typography } from "@mui/material";
 import React from "react";
 import { useNavigate } from "react-router";
-import { Svg404 } from "../assets/svg404";
+import { Svg404 } from "../../assets/svg404";
 
 const Unauthorized = () => {
   const navigate = useNavigate();

@@ -13,7 +13,7 @@ import {
 } from "@mui/material";
 import React, { useEffect, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
-import { updateTicketThunk } from "../reduxSetup/ticketDataSlice";
+import { updateTicketThunk } from "../../reduxSetup/ticketDataSlice";
 
 export const TicketDetailsCard = ({ dataObj }) => {
   const [ticketStatusRef, ticketPriorityRef] = [useRef(), useRef()];

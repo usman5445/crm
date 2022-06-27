@@ -1,11 +1,11 @@
 import { Box, Divider, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchTicketsThunk } from "../reduxSetup/ticketDataSlice";
-import { fetchUsersThunk } from "../reduxSetup/userDataSlice";
-import Sidebaar from "./Sidebaar";
+import { fetchTicketsThunk } from "../../reduxSetup/ticketDataSlice";
+import { fetchUsersThunk } from "../../reduxSetup/userDataSlice";
+import Sidebaar from "../common-components/Sidebaar";
 import TabPanelComponent from "./TabsPanel";
-import { TicketStatusCard } from "./TicketStatusCard";
+import { TicketStatusCard } from "../common-components/TicketStatusCard";
 
 export const Admin = () => {
   const dispatch = useDispatch();

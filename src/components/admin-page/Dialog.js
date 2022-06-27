@@ -15,8 +15,8 @@ import {
   MenuItem,
 } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
-import { updateTicketThunk } from "../reduxSetup/ticketDataSlice";
-import { updateUsersThunk } from "../reduxSetup/userDataSlice";
+import { updateTicketThunk } from "../../reduxSetup/ticketDataSlice";
+import { updateUsersThunk } from "../../reduxSetup/userDataSlice";
 
 export default function FormDialog({ open, setOpen, data }) {
   //   const [open, setOpen] = React.useState(false);

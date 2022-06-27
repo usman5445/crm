@@ -1,54 +1,52 @@
 import { LoginRounded } from "@mui/icons-material";
 import {
-  Box,
   Button,
   Card,
   CircularProgress,
-  FormControl,
   FormGroup,
-  InputLabel,
   Link,
-  MenuItem,
-  Select,
   TextField,
   Typography,
   useTheme,
 } from "@mui/material";
-import React, { useRef, useState } from "react";
-import { Navigate, useNavigate } from "react-router";
-import { signUpAuth } from "../utils/auth";
-import CustomizedSnackbars from "./CostomizedSnackBar";
-function SignUp() {
-  const navigate = useNavigate();
+import React, { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router";
+import { signInAuth } from "../../utils/auth";
+import CustomizedSnackbars from "../common-components/CostomizedSnackBar";
+import { userSliceAction } from "../../reduxSetup/userSlice";
+import { useDispatch } from "react-redux";
+function Sign() {
   const theme = useTheme();
-  const [loading, setLoading] = useState(false);
-
+  const dispatch = useDispatch();
   const [snackbarState, setSnackbarState] = useState({
     open: false,
     message: "",
   });
-  const [userIdRef, userNameRef, emailRef, passwordRef, userTypeRef] = [
-    useRef(),
-    useRef(),
-    useRef(),
-    useRef(),
-    useRef(),
-  ];
+  const [loading, setLoading] = useState(false);
+  const [userIdRef, passwordRef] = [useRef(), useRef()];
+  const navigate = useNavigate();
 
-  function handleSignup() {
+  function handleLogin() {
     setLoading(true);
     const data = {
-      name: userNameRef.current.value,
       userId: userIdRef.current.value,
-      email: emailRef.current.value,
-      userType: userTypeRef.current.value,
       password: passwordRef.current.value,
     };
-
-    signUpAuth(data)
+    signInAuth(data)
       .then((response) => {
         console.log(response);
-        navigate("/signIn");
+        dispatch(userSliceAction.saveUser(response.data));
+        localStorage.setItem("userData", JSON.stringify(response.data));
+        if (response.data.userTypes) {
+          response.data.userTypes == "CUSTOMER" && navigate("/customer");
+          response.data.userTypes == "ENGINEER" && navigate("/engineer");
+          response.data.userTypes == "ADMIN" && navigate("/admin");
+        } else {
+          setSnackbarState({
+            open: true,
+            message: response.data.message,
+          });
+        }
         setLoading(false);
       })
       .catch((error) => {
@@ -62,6 +60,7 @@ function SignUp() {
         setLoading(false);
       });
   }
+
   return (
     <Card
       sx={{
@@ -79,7 +78,7 @@ function SignUp() {
         <svg
           xmlns="http://www.w3.org/2000/svg"
           data-name="Layer 1"
-          width="50%"
+          width="90%"
           viewBox="0 0 793 551.73152"
           // xmlns:xlink="http://www.w3.org/1999/xlink"
         >
@@ -210,64 +209,40 @@ function SignUp() {
         color="primary"
         sx={{ fontWeight: "bold", textAlign: "center" }}
       >
-        SignUp Now
+        Login Now
       </Typography>
 
       <FormGroup sx={{ padding: 2 }}>
         <TextField
-          sx={{ margin: 1 }}
           inputRef={userIdRef}
+          sx={{ margin: 1 }}
           variant="outlined"
           label="UserId"
+          required={true}
         />
         <TextField
-          sx={{ margin: 1 }}
-          inputRef={userNameRef}
-          variant="outlined"
-          label="UserName"
-        />
-        <TextField
-          sx={{ margin: 1 }}
-          inputRef={emailRef}
-          variant="outlined"
-          label="Email"
-        />
-        <TextField
-          sx={{ margin: 1 }}
           inputRef={passwordRef}
+          sx={{ margin: 1 }}
           variant="outlined"
           label="Password"
+          type={"password"}
+          required={true}
         />
-        <FormControl fullWidth sx={{ margin: 1 }}>
-          <InputLabel id="demo-simple-select-label">UserType</InputLabel>
-          <Select
-            labelId="demo-simple-select-label"
-            id="demo-simple-select"
-            label="User Type"
-            inputRef={userTypeRef}
-            defaultValue=""
-          >
-            <MenuItem value={"CUSTOMER"}>CUSTOMER</MenuItem>
-            <MenuItem value={"ENGINEER"}>ENGINEER</MenuItem>
-            <MenuItem value={"ADMIN"}>ADMIN</MenuItem>
-          </Select>
-        </FormControl>
-
         <Button
           startIcon={loading ? null : <LoginRounded />}
           sx={{ margin: 1 }}
           variant="contained"
           color="primary"
-          onClick={handleSignup}
+          onClick={handleLogin}
           disabled={loading}
         >
-          {loading ? <CircularProgress size={30} /> : "SignUp"}
+          {loading ? <CircularProgress size={30} /> : "Login"}
         </Button>
       </FormGroup>
       <Typography variant="body1" sx={{ textAlign: "center" }}>
-        Already have an account?{" "}
-        <Link onClick={() => navigate("/signIn")} underline="hover">
-          Login
+        Don't have an account?
+        <Link onClick={() => navigate("/signUp")} underline="hover">
+          SignUp
         </Link>
       </Typography>
       <CustomizedSnackbars data={{ snackbarState, setSnackbarState }} />
@@ -275,4 +250,4 @@ function SignUp() {
   );
 }
 
-export default SignUp;
+export default Sign;

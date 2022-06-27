@@ -1,4 +1,5 @@
 import { fetchTickets } from "../utils/fetchTickets";
+import { newTicket } from "../utils/newTicket";
 import { updateTicket } from "../utils/updateTicket";
 
 const { createSlice, createAsyncThunk } = require("@reduxjs/toolkit");
@@ -9,6 +10,13 @@ const initialState = {
   error: "",
 };
 
+export const newTicketThunk = createAsyncThunk(
+  "ticketsData/newTicket",
+  async (dataObj) => {
+    const resp = await newTicket(dataObj);
+    return resp.data;
+  }
+);
 export const fetchTicketsThunk = createAsyncThunk(
   "ticketsData/fetchTickets",
   async () => {
@@ -57,6 +65,17 @@ const ticketsDataSlice = createSlice({
     builder.addCase(updateTicketThunk.rejected, (state, action) => {
       state.loading = false;
       console.log(action.error);
+      state.error = action.error.message;
+    });
+    builder.addCase(newTicketThunk.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(newTicketThunk.fulfilled, (state, action) => {
+      state.loading = false;
+      state.data.push(action.payload);
+    });
+    builder.addCase(newTicketThunk.rejected, (state, action) => {
+      state.loading = false;
       state.error = action.error.message;
     });
   },

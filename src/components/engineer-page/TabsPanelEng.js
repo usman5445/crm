@@ -3,7 +3,6 @@ import PropTypes from "prop-types";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Box from "@mui/material/Box";
-import DataTableComponent from "./DataTableComponent";
 import { TicketDetailsCard } from "./TicketDetailsCard";
 import { useSelector } from "react-redux";
 import { CircularProgress, Typography } from "@mui/material";
@@ -67,10 +66,10 @@ export default function TabPanelEngComponent() {
           onChange={handleChange}
           aria-label="basic tabs example"
         >
-          <Tab label="OPEN" {...a11yProps(0)} />
-          <Tab label="PROGRESS" {...a11yProps(1)} />
-          <Tab label="CLOSED" {...a11yProps(2)} />
-          <Tab label="BLOCKED" {...a11yProps(3)} />
+          <Tab key={"OPEN"} label="OPEN" {...a11yProps(0)} />
+          <Tab key={"PROGRESS"} label="PROGRESS" {...a11yProps(1)} />
+          <Tab key={"CLOSED"} label="CLOSED" {...a11yProps(2)} />
+          <Tab key={"BLOCKED"} label="BLOCKED" {...a11yProps(3)} />
         </Tabs>
       </Box>
       <TabPanel keyName={"OPEN"} value={value} index={0}>

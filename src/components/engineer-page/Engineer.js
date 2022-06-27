@@ -2,11 +2,10 @@ import { Box, Divider, Paper, Typography } from "@mui/material";
 import React from "react";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchTicketsThunk } from "../reduxSetup/ticketDataSlice";
-import Sidebaar from "./Sidebaar";
+import { fetchTicketsThunk } from "../../reduxSetup/ticketDataSlice";
+import Sidebaar from "../common-components/Sidebaar";
 import TabPanelEngComponent from "./TabsPanelEng";
-import { TicketDetailsCard } from "./TicketDetailsCard";
-import { TicketStatusCard } from "./TicketStatusCard";
+import { TicketStatusCard } from "../common-components/TicketStatusCard";
 
 export const Engineer = () => {
   const ticketData = useSelector((state) => state.ticketsData);
